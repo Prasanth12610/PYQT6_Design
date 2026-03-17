@@ -1,0 +1,62 @@
+PyQt_Login_App/
+│
+├── main.py   # Application entry point.
+│   
+├── requirements.txt
+│
+├── .gitignore
+│
+├── ui/
+│   ├── login_ui.py    # Login window UI
+│   │   
+│   └── register_ui.py    # Register window UI for creating new users.
+|
+├── services/
+│   └── auth_service.py     # Handles login and register logic (validate user, create user).
+│       
+├── utils/
+│   ├── xml_handler.py      # Reads and writes user data to the XML file.
+│   │  
+│   └── security.py         # Hashes passwords and verifies them using hashlib.
+│      
+├── storage/
+│   └── users.xml       # Stores user credentials 
+|
+└── styles/
+    └── style.qss
+        # UI styling file (colors, buttons, input design).
+
+
+
+PyQt6                 → UI
+xml.etree.ElementTree → XML read/write
+hashlib               → encrypt password
+
+
+Login Flow (How it works)
+
+User enters username + password
+        ↓
+PyQt6 UI sends data to auth_service
+        ↓
+auth_service reads users.xml
+        ↓
+check username & password
+        ↓
+if match → Login success
+else → Invalid credentials
+
+
+
+Register (Create New User)
+
+User clicks Register
+        ↓
+Enter username + password
+        ↓
+Check if username already exists in XML
+        ↓
+If not exist → append to XML
+        ↓
+Save users.xml
+

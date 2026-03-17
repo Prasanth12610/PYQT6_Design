@@ -1,0 +1,6 @@
+PyQt6   
+qdarktheme
+qt-material
+qtawesome
+matplotlib
+matplotlib>=3.7.0
