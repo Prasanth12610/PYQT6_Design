@@ -10,7 +10,6 @@ A professional, feature-rich desktop application built with PyQt6 featuring a mo
 
 ## 📋 Table of Contents
 - [Features](#-features)
-- [Screenshots](#-screenshots)
 - [Installation](#-installation)
 - [Project Structure](#-project-structure)
 - [Usage](#-usage)
@@ -55,14 +54,6 @@ A professional, feature-rich desktop application built with PyQt6 featuring a mo
 - XML-based user data storage
 - Session tracking with login/logout timestamps
 - Password strength enforcement
-
-## 📸 Screenshots
-
-*[Add your screenshots here]*
-
-| Login Page | Register Page | Dashboard |
-|------------|---------------|-----------|
-| ![Login]   | ![Register]   | ![Dashboard] |
 
 ## 🚀 Installation
 
