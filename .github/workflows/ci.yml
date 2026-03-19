@@ -24,10 +24,10 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller --onefile --windowed ^
-        --add-data "storage;storage" ^
-        --add-data "styles;styles" ^
-        --add-data "ui;ui" ^
+        pyinstaller --onefile --windowed `
+        --add-data "storage;storage" `
+        --add-data "styles;styles" `
+        --add-data "ui;ui" `
         main.py
 
     - name: Upload EXE
