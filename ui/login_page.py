@@ -21,39 +21,39 @@ class LoginPage(_Page):
         lay.setContentsMargins(36, 36, 36, 36)
         lay.setSpacing(0)
 
-        # ── App icon
-        ico = QLabel("✦")
+        #  App icon
+        ico = QLabel("")
         ico.setStyleSheet("font-size:20px; color:#6B6CF6; background:transparent; border:none;")
         lay.addWidget(ico)
         lay.addSpacing(15)
 
-        # ── Title + subtitle
+        #  Title + subtitle
         lay.addWidget(QLabel("Welcome back", styleSheet=TTL_S))
         sub = QLabel("Sign in to your account to continue")
         sub.setStyleSheet(SUB_S + " margin-top:3px;")
         lay.addWidget(sub)
         lay.addSpacing(28)
 
-        # ── Username field
+        #  Username field
         lay.addWidget(_lbl("USERNAME"))
         lay.addSpacing(7)
         self.u = _inp("Enter your username")
         lay.addWidget(self.u)
         lay.addSpacing(16)
 
-        # ── Password field (with eye-icon toggle)
+        #  Password field (with eye-icon toggle)
         lay.addWidget(_lbl("PASSWORD"))
         lay.addSpacing(7)
         self.p = PwdField("Enter your password", height=44)
         lay.addWidget(self.p)
         lay.addSpacing(12)
 
-        # ── Status label (shows success / error messages inline)
+        #  Status label (shows success / error messages inline)
         self.st = StatusLabel()
         lay.addWidget(self.st)
         lay.addSpacing(14)
 
-        # ── Sign In button
+        #  Sign In button
         self.btn = QPushButton("Sign In")
         self.btn.setFixedHeight(46)
         self.btn.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -62,7 +62,7 @@ class LoginPage(_Page):
         lay.addWidget(self.btn)
         lay.addSpacing(16)
 
-        # ── Divider + Create Account link
+        #  Divider + Create Account link
         lay.addLayout(_divider())
         lay.addSpacing(16)
 
@@ -73,7 +73,7 @@ class LoginPage(_Page):
         rb.clicked.connect(self._switch)
         lay.addWidget(rb)
 
-        # ── Enter key navigation: username → password → submit
+        #  Enter key navigation: username → password → submit
         self.u.returnPressed.connect(self.p.setFocus)
         self.p.returnPressed.connect(self._go)
 
@@ -116,7 +116,7 @@ class LoginPage(_Page):
         self.btn.setEnabled(True)
 
         if ok:
-            self.st.show_ok("✓  " + msg + "  — opening dashboard…", auto_hide_ms=2000)
+            self.st.show_ok("  " + msg + "  — opening dashboard…", auto_hide_ms=2000)
 
             # Capture login timestamp NOW (datetime is imported at top of file)
             login_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -124,7 +124,7 @@ class LoginPage(_Page):
             # Brief delay so the user sees the success message before switching
             QTimer.singleShot(600, lambda: self._open_dashboard(user, entry_id, login_time))
         else:
-            self.st.show_err("✕  " + msg, auto_hide_ms=8000)
+            self.st.show_err("  " + msg, auto_hide_ms=8000)
             shake(self.card)
 
     # =========================================================================

@@ -11,7 +11,7 @@ class UIInspector(QObject):
     def toggle(self):
         self.enabled = not self.enabled
 
-        print("🛠 Dev Mode:", self.enabled)
+        print(" Dev Mode:", self.enabled)
 
         if self.enabled:
             self.devtools.show()

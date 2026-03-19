@@ -194,9 +194,9 @@ class GradientBG(QWidget):
         p.drawEllipse(int(cx - 60 - s * .4), int(cy - 60), 440, 380)
 
 
-# ══════════════════════════════════════════════════════════
+# 
 #  Glass card
-# ══════════════════════════════════════════════════════════
+# 
 class GlassCard(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -212,9 +212,9 @@ class GlassCard(QWidget):
         p.drawLine(18, 1, self.width() - 18, 1)
 
 
-# ══════════════════════════════════════════════════════════
+# 
 #  Shake animation
-# ══════════════════════════════════════════════════════════
+# 
 def shake(w):
     orig = w.pos()
     a = QPropertyAnimation(w, b"pos")
@@ -487,10 +487,10 @@ class PasswordRequirementWidget(QWidget):
 
         for key, text in self.base_requirements.items():
             if requirements.get(key):
-                # ✅ met → green
-                parts.append(f"<span style='color:{GREEN};'>✓ {text}</span>")
+                #  met → green
+                parts.append(f"<span style='color:{GREEN};'> {text}</span>")
             else:
-                # ❌ not met → dim
+                #  not met → dim
                 parts.append(f"<span style='color:{TEXT2};'>{text}</span>")
 
         full_text = " • ".join(parts)
