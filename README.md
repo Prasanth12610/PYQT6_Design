@@ -1,7 +1,4 @@
 "# PYQT6_Design" 
-<<<<<<< HEAD
-"# PYQT6_Design" 
-=======
 
 # PyQt6 Login System with Modern Dashboard
 
@@ -68,4 +65,3 @@ A professional, feature-rich desktop application built with PyQt6 featuring a mo
 ```bash
 git clone https://github.com/yourusername/qt-login-system.git
 cd qt-login-system
->>>>>>> ffb6059fdad7b947570601408022f5a585042794
