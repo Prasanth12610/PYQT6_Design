@@ -12,7 +12,7 @@ import os                               # File/directory existence checks
 from datetime import datetime           # Timestamp generation
 
 
-# ── File paths (relative to project root where main.py is run from)
+#  File paths (relative to project root where main.py is run from)
 USERS_FILE = "storage/users.xml"
 LOGS_FILE  = "storage/login_logs.xml"
 
@@ -132,7 +132,7 @@ def add_user(username, password_hash):
     tree = ET.parse(USERS_FILE)
     root = tree.getroot()
  
-    # ── FIXED: use the constant tag name "user" (was f"user{user_count}")
+    #  FIXED: use the constant tag name "user" (was f"user{user_count}")
     user = ET.SubElement(root, "user")
     ET.SubElement(user, "username").text = username
     ET.SubElement(user, "password").text = password_hash

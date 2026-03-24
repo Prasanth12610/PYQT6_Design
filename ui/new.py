@@ -36,9 +36,9 @@ from utils.xml_handler import (
     log_logout, read_logs,
 )
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  DESIGN TOKENS
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 BG       = "#07090F"
 SIDE_BG  = "#0A0C18"
 CARD_BG  = "#0E1120"
@@ -64,11 +64,11 @@ CHART_C = ["#4F8EF7","#F56565","#2DD4AA","#F6C343",
 _FF = '"Segoe UI", "SF Pro Text", "Helvetica Neue", "Arial", "sans-serif"'
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  SVG ICON LOADER
 #  Creates SVG icons from strings (Heroicons/Tabler style)
 #  No external files needed - icons are embedded as strings
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 
 def create_svg_icon(svg_content, size=20, color="#FFFFFF"):
     """Create QIcon from SVG string content with specified color"""
@@ -179,9 +179,9 @@ def _test_icons(self):
         btn._update_icon()
 
         
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  PulseDot — breathing online indicator
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 class PulseDot(QWidget):
     def __init__(self, color=GREEN, size=7, parent=None):
         super().__init__(parent)
@@ -214,9 +214,9 @@ class PulseDot(QWidget):
         p.drawEllipse(2, 2, self._sz, self._sz)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  HoverCard — border/shadow hover only
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 class HoverCard(QFrame):
     def __init__(self, accent=ACCENT, radius=14, parent=None):
         super().__init__(parent)
@@ -253,9 +253,9 @@ class HoverCard(QFrame):
         return int(h[0:2],16), int(h[2:4],16), int(h[4:6],16)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  StatCard — KPI cards with SVG icons
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 class StatCard(HoverCard):
     def __init__(self, title, value, subtitle="",
                  accent=ACCENT, icon_name="dashboard", parent=None):
@@ -374,9 +374,9 @@ class StatCard(HoverCard):
         self.val_lbl.setText(str(self._cur))
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  Chart Classes (Pie, Bar, Line only - No Donut)
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 _CW, _CH   = 4.0, 2.8
 _CARD_H    = 220
 _TITLE_TOP = 0.88
@@ -533,9 +533,9 @@ class LineChart(_Chart):
         self._draw(daily)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  Chart card wrapper
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 def _chart_card(canvas, accent=ACCENT):
     card = HoverCard(accent, 14)
     card.setFixedHeight(_CARD_H)
@@ -546,9 +546,9 @@ def _chart_card(canvas, accent=ACCENT):
     return card
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  Divider
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 def _divider():
     d = QFrame()
     d.setFrameShape(QFrame.Shape.HLine)
@@ -557,9 +557,9 @@ def _divider():
     return d
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  Section header with SVG icon - IMPROVED STYLING
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 def _section_hdr(text, chip_text="", chip_color=ACCENT, icon_name=None):
     row = QHBoxLayout()
     row.setSpacing(10)
@@ -605,9 +605,9 @@ def _section_hdr(text, chip_text="", chip_color=ACCENT, icon_name=None):
     return row
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  User Table with improved scrollbar (right corner) - FIXED HEADER ALIGNMENT
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 class UserTable(QTableWidget):
     HEADERS = ["#", "Username", "Registered", "Last Login", "Logins"]
 
@@ -713,9 +713,9 @@ class UserTable(QTableWidget):
             self.setRowHeight(i, 44)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  Analytics Table with improved scrollbar (right corner) - FIXED HEADER ALIGNMENT
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 class AnalyticsTable(QTableWidget):
     HEADERS = ["#", "Username", "Login Time", "Logout Time", "Duration", "Status"]
 
@@ -844,9 +844,9 @@ class AnalyticsTable(QTableWidget):
                 self.setItem(i, j, item)
             self.setRowHeight(i, 44)
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  NavButton with SVG icons - FIXED: Proper icon color control
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 class NavButton(QPushButton):
     def __init__(self, label, icon_name, accent=ACCENT):
         super().__init__()
@@ -902,9 +902,9 @@ class NavButton(QPushButton):
         self._style()
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  Scrollable page wrapper (FIXED: scrollbar on right corner)
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 def _wrap_scroll(w):
     sa = QScrollArea()
     sa.setWidgetResizable(True)
@@ -944,9 +944,9 @@ def _wrap_scroll(w):
     return sa
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  Page Builders
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 def _build_overview_page(cards, pie, bar, line, table):
     w = QWidget()
     w.setStyleSheet("background:transparent;")
@@ -1137,9 +1137,9 @@ def _build_analytics_page(atbl):
     return w
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 #  DashboardWindow
-# ══════════════════════════════════════════════════════════════════════════════
+# 
 class DashboardWindow(QMainWindow):
     def __init__(self, username: str, entry_id: str, login_time: str):
         super().__init__()
@@ -1237,7 +1237,7 @@ class DashboardWindow(QMainWindow):
         # Start animation
         self._anim_group.start()
 
-    # ── Init pages ────────────────────────────────────────────────────────────
+    #  Init pages 
     def _init_pages(self):
         users = get_all_users()
         stats = get_login_stats()
@@ -1287,7 +1287,7 @@ class DashboardWindow(QMainWindow):
 
         self._stack.setCurrentIndex(0)
 
-    # ── Sidebar ───────────────────────────────────────────────────────────────
+    #  Sidebar 
     def _build_sidebar(self):
         sb = QFrame()
         sb.setFixedWidth(216)
@@ -1424,7 +1424,7 @@ class DashboardWindow(QMainWindow):
         # After creating nav buttons
         QTimer.singleShot(100, self._test_icons)  # Test after UI is built
 
-    # ── Topbar ────────────────────────────────────────────────────────────────
+    #  Topbar 
     def _build_topbar(self):
         bar = QWidget()
         bar.setFixedHeight(56) 
@@ -1491,7 +1491,7 @@ class DashboardWindow(QMainWindow):
         # Small delay to show animation before refresh starts
         QTimer.singleShot(200, self._refresh_all)
 
-    # ── Tab switch ────────────────────────────────────────────────────────────
+    #  Tab switch 
     def _switch(self, idx: int):
         LABELS = ["Overview", "Users", "Analytics"]
         for i, b in enumerate(self._nav_btns):
@@ -1501,7 +1501,7 @@ class DashboardWindow(QMainWindow):
         if idx == 2:
             self._tan.populate()
 
-    # ── Helpers ───────────────────────────────────────────────────────────────
+    #  Helpers 
     def _today(self):
         return get_daily_logins().get(datetime.now().strftime("%Y-%m-%d"), 0)
 

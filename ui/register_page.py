@@ -24,7 +24,7 @@ class RegisterPage(_Page):
         lay.setContentsMargins(36, 32, 36, 32)
         lay.setSpacing(0)
 
-        ico = QLabel("✦")
+        ico = QLabel("")
         ico.setStyleSheet("font-size:20px; color:#6B6CF6; background:transparent; border:none;")
         lay.addWidget(ico)
         lay.addSpacing(14)
@@ -160,10 +160,10 @@ class RegisterPage(_Page):
         if not pwd or not confirm:
             self.match_label.setText("")
         elif pwd == confirm:
-            self.match_label.setText("✓ Passwords match")
+            self.match_label.setText(" Passwords match")
             self.match_label.setStyleSheet(f"font-size:11px; color:{GREEN}; background:transparent; border:none; font-family:{_FF};")
         else:
-            self.match_label.setText("✗ Passwords do not match")
+            self.match_label.setText(" Passwords do not match")
             self.match_label.setStyleSheet(f"font-size:11px; color:{RED}; background:transparent; border:none; font-family:{_FF};")
 
     def _validate_password(self, pwd):
@@ -203,8 +203,8 @@ class RegisterPage(_Page):
         self.btn.setText("Create Account")
         self.btn.setEnabled(True)
         if ok:
-            self.st.show_ok("✓  " + msg + " — sign in now.", auto_hide_ms=5000)
+            self.st.show_ok("  " + msg + " — sign in now.", auto_hide_ms=5000)
             QTimer.singleShot(1600, self._switch)
         else:
-            self.st.show_err("✕  " + msg, auto_hide_ms=8000)
+            self.st.show_err("  " + msg, auto_hide_ms=8000)
             shake(self.card)

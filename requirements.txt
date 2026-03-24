@@ -1,6 +1,4 @@
-PyQt6   
-qdarktheme
+PyQt6
 qt-material
 qtawesome
-matplotlib
 matplotlib>=3.7.0

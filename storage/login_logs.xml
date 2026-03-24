@@ -672,4 +672,11 @@
         <logout_time />
         <duration_min />
     </login>
+    <login>
+        <id>96</id>
+        <username>prasanth</username>
+        <login_time>2026-03-24 17:34:49</login_time>
+        <logout_time>2026-03-24 17:35:20</logout_time>
+        <duration_min>0.5</duration_min>
+    </login>
 </logins>
