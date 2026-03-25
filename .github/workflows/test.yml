@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────────────────────
+# Automated Tests  –  pytest + Coverage
+# Runs the test suite in tests/ and uploads a coverage report
+# as a downloadable artifact for every PR and push to main.
+# ─────────────────────────────────────────────────────────────
+name: Tests – pytest & Coverage
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run pytest
+    runs-on: windows-latest   # Windows to match production environment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Reuse cached packages from ci.yml (same cache key)
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies + test tools
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      # ── Run tests ─────────────────────────────────────────
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ -v `
+            --cov=services `
+            --cov=utils `
+            --cov-report=xml `
+            --cov-report=term-missing
+
+      # ── Upload coverage XML as artifact ───────────────────
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 14

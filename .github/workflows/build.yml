@@ -1,0 +1,63 @@
+# ─────────────────────────────────────────────────────────────
+# Build Executable  –  PyInstaller Windows .exe
+# Triggered on every push to main.
+# The resulting .exe is uploaded as a GitHub Actions artifact
+# (downloadable for 30 days from the Actions tab).
+# ─────────────────────────────────────────────────────────────
+name: Build – Windows Executable
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # Allow manual trigger from GitHub UI
+
+jobs:
+  build-windows:
+    name: Build .exe (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Reuse cached packages
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      # ── Build the .exe ────────────────────────────────────
+      - name: Build .exe with PyInstaller
+        run: |
+          pyinstaller main.py `
+            --name "QT_Login_System" `
+            --onefile `
+            --windowed `
+            --add-data "storage;storage" `
+            --add-data "styles;styles" `
+            --add-data "ui;ui"
+
+      # ── Show build output for debugging ───────────────────
+      - name: List dist folder
+        run: Get-ChildItem dist/
+
+      # ── Upload as downloadable artifact ───────────────────
+      - name: Upload .exe artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: QT_Login_System-windows-${{ github.sha }}
+          path: dist/QT_Login_System.exe
+          retention-days: 30

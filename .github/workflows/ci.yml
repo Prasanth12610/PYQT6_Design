@@ -1,37 +1,44 @@
-name: Build PyQt6 App
+# ─────────────────────────────────────────────────────────────
+# CI Pipeline  –  Install & Cache
+# Runs on every push to main/dev and on pull requests.
+# Caches pip packages so subsequent runs are much faster.
+# ─────────────────────────────────────────────────────────────
+name: CI – Install & Cache
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
 
 jobs:
-  build:
+  install:
+    name: Install Dependencies
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install pyinstaller
+      # ✅ Cache pip packages — keyed by requirements.txt hash.
+      # If requirements.txt hasn't changed, pip install is skipped entirely.
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-    - name: Build EXE
-      run: |
-        pyinstaller --onefile --windowed `
-        --add-data "storage;storage" `
-        --add-data "styles;styles" `
-        --add-data "ui;ui" `
-        main.py
+      - name: Install project dependencies
+        run: pip install -r requirements.txt
 
-    - name: Upload EXE
-      uses: actions/upload-artifact@v4
-      with:
-        name: QT_Login_System
-        path: dist/*.exe
+      - name: Verify installation
+        run: |
+          python -c "import PyQt6; print('PyQt6 OK')"
+          python -c "import matplotlib; print('matplotlib OK')"

@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────
+# Code Quality  –  Linting & Formatting
+# Runs flake8 (PEP 8), black (formatting), and pylint (deep analysis).
+# Fails the job if code quality score drops below 7.0 / 10.
+# ─────────────────────────────────────────────────────────────
+name: Code Quality – Lint & Format
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest   # lint runs fine on Linux; faster & cheaper
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install linting tools
+        run: pip install flake8 pylint black
+
+      # ── 1. PEP 8 style check ──────────────────────────────
+      - name: Run flake8 (PEP 8)
+        run: |
+          flake8 . \
+            --max-line-length=120 \
+            --exclude=__pycache__,.git,Vibe_coding \
+            --statistics \
+            --count
+
+      # ── 2. Format consistency check ───────────────────────
+      # black --check does NOT reformat; it only reports issues.
+      - name: Run black (format check only)
+        run: |
+          black --check --line-length 120 \
+            main.py services/ ui/ utils/
+
+      # ── 3. Deep static analysis ───────────────────────────
+      - name: Run pylint
+        run: |
+          pylint main.py services/ ui/ utils/ \
+            --max-line-length=120 \
+            --fail-under=7.0 \
+            --disable=C0114,C0115,C0116   # ignore missing docstrings for now

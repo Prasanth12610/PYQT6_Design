@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────
+# Security Scan  –  Dependency CVE + Code Analysis
+# • safety  : checks packages in requirements.txt for CVEs
+# • bandit  : checks Python source for insecure code patterns
+#
+# Scheduled: every Monday at 6 AM UTC (weekly auto-scan)
+# Also runs manually or on push to main.
+# ─────────────────────────────────────────────────────────────
+name: Security Scan
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"   # Every Monday 06:00 UTC
+  workflow_dispatch:       # Allow manual trigger from GitHub UI
+
+jobs:
+  security:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install security tools
+        run: pip install safety bandit
+
+      # ── 1. CVE check on all packages ──────────────────────
+      - name: Check dependencies for known CVEs (safety)
+        run: safety check -r requirements.txt --full-report
+        continue-on-error: true   # report but don't hard-fail (informational)
+
+      # ── 2. Source code security audit ─────────────────────
+      # -ll = only report medium and high severity issues
+      - name: Static security analysis (bandit)
+        run: |
+          bandit -r main.py services/ ui/ utils/ \
+            -x __pycache__ \
+            -ll \
+            -f txt
+
+      # ── 3. Check for hardcoded secrets ────────────────────
+      - name: Detect hardcoded secrets (detect-secrets)
+        run: |
+          pip install detect-secrets
+          detect-secrets scan --baseline .secrets.baseline || true
