@@ -60,3 +60,65 @@ If not exist → append to XML
         ↓
 Save users.xml
 
+
+CI/CD Pipeline Arch
+
+
+CI/CD Pipeline (GitHub Actions)
+│
+├── Trigger (Events)
+│   ├── Push (main / dev)
+│   ├── Pull Request
+│   ├── Schedule (cron)
+│   └── Tag (v1.0.0)
+│
+├── Continuous Integration (CI)
+│   │
+│   ├── ci.yml (Setup & Cache)
+│   │   ├── Checkout Code
+│   │   ├── Setup Python
+│   │   ├── Cache Dependencies
+│   │   └── Install Requirements
+│   │
+│   ├── lint.yml (Code Quality)
+│   │   ├── flake8 (Style Check)
+│   │   ├── black (Formatting Check)
+│   │   └── pylint (Code Quality Score)
+│   │
+│   ├── test.yml (Automated Testing)
+│   │   ├── Run pytest
+│   │   ├── Validate Auth Logic
+│   │   └── Generate Coverage Report
+│   │
+│   └── security.yml (Security Scan)
+│       ├── safety (Dependency Vulnerabilities)
+│       └── bandit (Code Security Issues)
+│
+├── Continuous Delivery (CD)
+│   │
+│   ├── build.yml (Build Application)
+│   │   ├── Install Dependencies
+│   │   ├── Run PyInstaller
+│   │   └── Generate .exe File
+│   │
+│   └── release.yml (Release Management)
+│       ├── Trigger on Tag (v*)
+│       ├── Build .exe
+│       ├── Create GitHub Release
+│       └── Upload Executable
+│
+├── Artifacts
+│   ├── .exe File
+│   ├── Test Reports
+│   └── Coverage Reports
+│
+└── Notifications (Optional)
+    ├── Email Notification
+    └── Scheduled Jobs (cron)
+
+
+Trigger → Starts the workflow
+CI → Checks code quality, testing, and security
+CD → Builds and releases application
+Artifacts → Output files
+Notifications → Alerts and scheduled automation
