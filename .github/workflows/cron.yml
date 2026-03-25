@@ -1,0 +1,26 @@
+name: Scheduled Job
+
+on:
+  schedule:
+    - cron: "30 3 * * *"   # Daily 9:00 AM IST
+  workflow_dispatch:       
+
+jobs:
+  run-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Message
+        run: echo "Scheduled job running successfully"
+
+      - name: Send Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Scheduled Job Status
+          body: Cron job executed successfully.
+          to: yourmail@gmail.com
+          from: yourmail@gmail.com

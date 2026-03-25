@@ -1,0 +1,24 @@
+name: Email Notification
+
+on:
+  workflow_run:
+    workflows: ["Build PyQt6 App"]
+    types:
+      - completed
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Build Status - PyQt6 App
+          body: Workflow completed. Check GitHub Actions for details.
+          to: yourmail@gmail.com
+          from: yourmail@gmail.com
