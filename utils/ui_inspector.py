@@ -2,6 +2,7 @@ from PyQt6.QtCore import QObject, QEvent
 from utils.devtools_window import DevToolsWindow
 from PyQt6.QtWidgets import QWidget
 
+
 class UIInspector(QObject):
     def __init__(self):
         super().__init__()
@@ -36,7 +37,9 @@ class UIInspector(QObject):
 
         elif event.type() == QEvent.Type.Leave:
             try:
-                obj.setStyleSheet(obj.styleSheet().replace("outline:1px solid red;", ""))
+                obj.setStyleSheet(
+                    obj.styleSheet().replace("outline:1px solid red;", "")
+                )
             except:
                 pass
 
@@ -47,7 +50,7 @@ class UIInspector(QObject):
             if not isinstance(obj, QWidget):
                 return False
 
-            #Ignore menus/tooltips
+            # Ignore menus/tooltips
             if obj.metaObject().className() in ["QMenu", "QToolTip"]:
                 return False
 

@@ -7,21 +7,20 @@
 #  Used by : services/auth_service.py, ui/dashboard_ui.py
 # =============================================================================
 
-import xml.etree.ElementTree as ET     # Standard-library XML parser/writer
-import os                               # File/directory existence checks
-from datetime import datetime           # Timestamp generation
-
+import xml.etree.ElementTree as ET  # Standard-library XML parser/writer
+import os  # File/directory existence checks
+from datetime import datetime  # Timestamp generation
 
 #  File paths (relative to project root where main.py is run from)
 USERS_FILE = "storage/users.xml"
-LOGS_FILE  = "storage/login_logs.xml"
+LOGS_FILE = "storage/login_logs.xml"
 
 
 def _ensure_dir():
     """Create the storage/ directory if it doesn't already exist."""
     os.makedirs("storage", exist_ok=True)
 
-    
+
 def _write_empty(path, root_tag):
     """
     Write a valid, non-empty XML file with a single root element.
@@ -40,11 +39,11 @@ def _write_empty(path, root_tag):
 # =============================================================================
 def init_xml():
     _ensure_dir()
- 
+
     # Create or fix users.xml
     if not os.path.exists(USERS_FILE) or os.path.getsize(USERS_FILE) == 0:
         _write_empty(USERS_FILE, "users")
- 
+
     # Create or fix login_logs.xml
     if not os.path.exists(LOGS_FILE) or os.path.getsize(LOGS_FILE) == 0:
         _write_empty(LOGS_FILE, "logins")
@@ -98,10 +97,10 @@ def read_users():
 #    </user>
 # =============================================================================
 # def add_user(username, password_hash):
-    
+
 #     # Ensure file exists and is valid first
 #     init_xml()
-    
+
 #     tree = ET.parse(USERS_FILE)
 #     root = tree.getroot()
 
@@ -118,10 +117,11 @@ def read_users():
 #     ET.indent(tree, space="    ", level=0)
 #     tree.write(USERS_FILE, encoding="utf-8", xml_declaration=True)
 
+
 def add_user(username, password_hash):
     """
     Append a new <user> block to users.xml.
- 
+
     XML written:
         <user>
             <username>alice</username>
@@ -131,16 +131,17 @@ def add_user(username, password_hash):
     """
     tree = ET.parse(USERS_FILE)
     root = tree.getroot()
- 
+
     #  FIXED: use the constant tag name "user" (was f"user{user_count}")
     user = ET.SubElement(root, "user")
     ET.SubElement(user, "username").text = username
     ET.SubElement(user, "password").text = password_hash
-    ET.SubElement(user, "created").text  = datetime.now().strftime("%Y-%m-%d %H:%M")
- 
+    ET.SubElement(user, "created").text = datetime.now().strftime("%Y-%m-%d %H:%M")
+
     ET.indent(tree, space="    ")
     tree.write(USERS_FILE, encoding="utf-8", xml_declaration=True)
- 
+
+
 # =============================================================================
 #  user_exists(username) -> bool
 #  Scan users.xml for a matching <username> element.
@@ -148,7 +149,7 @@ def add_user(username, password_hash):
 # =============================================================================
 def user_exists(username):
     username = username.strip().lower()
-    
+
     for u in read_users().findall("user"):
         uname = u.find("username")
         if uname is not None and uname.text == username:
@@ -167,28 +168,35 @@ def user_exists(username):
 #  Used by the dashboard table and the pie chart.
 # =============================================================================
 def get_all_users():
-    root   = read_users()
-    logs   = read_logs()
+    root = read_users()
+    logs = read_logs()
     result = []
- 
-    for u in root.findall("user"):          # "user" matches fixed tag name
-        uname   = u.find("username").text
+
+    for u in root.findall("user"):  # "user" matches fixed tag name
+        uname = u.find("username").text
         created = u.find("created").text if u.find("created") is not None else "N/A"
- 
-        user_logs    = [l for l in logs.findall("login")
-                        if l.find("username") is not None
-                        and l.find("username").text == uname]
+
+        user_logs = [
+            l
+            for l in logs.findall("login")
+            if l.find("username") is not None and l.find("username").text == uname
+        ]
         total_logins = len(user_logs)
-        times        = [l.find("login_time").text for l in user_logs
-                        if l.find("login_time") is not None and l.find("login_time").text]
-        last_login   = sorted(times)[-1][:16] if times else "Never"
- 
-        result.append({
-            "username":     uname,
-            "created":      created,
-            "total_logins": total_logins,
-            "last_login":   last_login,
-        })
+        times = [
+            l.find("login_time").text
+            for l in user_logs
+            if l.find("login_time") is not None and l.find("login_time").text
+        ]
+        last_login = sorted(times)[-1][:16] if times else "Never"
+
+        result.append(
+            {
+                "username": uname,
+                "created": created,
+                "total_logins": total_logins,
+                "last_login": last_login,
+            }
+        )
     return result
 
 
@@ -223,22 +231,24 @@ def log_login(username):
     _ensure_dir()
     if not os.path.exists(LOGS_FILE) or os.path.getsize(LOGS_FILE) == 0:
         _write_empty(LOGS_FILE, "logins")
- 
-    tree     = ET.parse(LOGS_FILE)
-    root     = tree.getroot()
+
+    tree = ET.parse(LOGS_FILE)
+    root = tree.getroot()
     entry_id = str(len(root.findall("login")))
- 
+
     entry = ET.SubElement(root, "login")
-    ET.SubElement(entry, "id").text           = entry_id
-    ET.SubElement(entry, "username").text     = username
-    ET.SubElement(entry, "login_time").text   = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    ET.SubElement(entry, "logout_time").text  = ""   # filled by log_logout()
-    ET.SubElement(entry, "duration_min").text = ""   # filled by log_logout()
- 
+    ET.SubElement(entry, "id").text = entry_id
+    ET.SubElement(entry, "username").text = username
+    ET.SubElement(entry, "login_time").text = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+    ET.SubElement(entry, "logout_time").text = ""  # filled by log_logout()
+    ET.SubElement(entry, "duration_min").text = ""  # filled by log_logout()
+
     ET.indent(tree, space="    ")
     tree.write(LOGS_FILE, encoding="utf-8", xml_declaration=True)
     return entry_id
- 
+
 
 # =============================================================================
 #  log_logout(entry_id, login_time_str)
@@ -253,7 +263,7 @@ def log_logout(entry_id, login_time_str):
         tree = ET.parse(LOGS_FILE)
     except ET.ParseError:
         return
- 
+
     root = tree.getroot()
     for entry in root.findall("login"):
         eid = entry.find("id")
@@ -267,7 +277,7 @@ def log_logout(entry_id, login_time_str):
             except Exception:
                 entry.find("duration_min").text = "0"
             break
- 
+
     ET.indent(tree, space="    ")
     tree.write(LOGS_FILE, encoding="utf-8", xml_declaration=True)
 
@@ -302,19 +312,36 @@ def get_daily_logins():
             daily[day] = daily.get(day, 0) + 1
     return daily
 
+
 def get_login_history():
     """Return complete login history with all session details."""
     history = []
     logs = read_logs()
-    
+
     for entry in logs.findall("login"):
         login_entry = {
-            'id': entry.find('id').text if entry.find('id') is not None else '',
-            'username': entry.find('username').text if entry.find('username') is not None else '',
-            'login_time': entry.find('login_time').text if entry.find('login_time') is not None else '',
-            'logout_time': entry.find('logout_time').text if entry.find('logout_time') is not None else '',
-            'duration_min': entry.find('duration_min').text if entry.find('duration_min') is not None else ''
+            "id": entry.find("id").text if entry.find("id") is not None else "",
+            "username": (
+                entry.find("username").text
+                if entry.find("username") is not None
+                else ""
+            ),
+            "login_time": (
+                entry.find("login_time").text
+                if entry.find("login_time") is not None
+                else ""
+            ),
+            "logout_time": (
+                entry.find("logout_time").text
+                if entry.find("logout_time") is not None
+                else ""
+            ),
+            "duration_min": (
+                entry.find("duration_min").text
+                if entry.find("duration_min") is not None
+                else ""
+            ),
         }
         history.append(login_entry)
-    
+
     return history

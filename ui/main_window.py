@@ -29,9 +29,12 @@ class LoginWindow(QMainWindow):
         # Fade in animation
         self.setWindowOpacity(0.0)
         a = QPropertyAnimation(self, b"windowOpacity")
-        a.setDuration(300); a.setStartValue(0.0); a.setEndValue(1.0)
+        a.setDuration(300)
+        a.setStartValue(0.0)
+        a.setEndValue(1.0)
         a.setEasingCurve(QEasingCurve.Type.OutCubic)
-        a.start(); self._fade = a
+        a.start()
+        self._fade = a
 
     def _show_register(self):
         self.stack.setCurrentIndex(1)

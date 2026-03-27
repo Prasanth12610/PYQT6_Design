@@ -3,8 +3,8 @@ from utils.security import hash_password, verify_password
 
 
 def register_user(username, password):
-    
-    #Normalize username (case-insensitive)
+
+    # Normalize username (case-insensitive)
     username = username.strip().lower()
 
     # Check if user already exists in XML
@@ -22,7 +22,7 @@ def register_user(username, password):
 
 def login_user(username, password):
 
-    #Normalize username
+    # Normalize username
     username = username.strip().lower()
 
     # Read all users from XML
@@ -40,7 +40,9 @@ def login_user(username, password):
 
             # Verify hashed password
             if verify_password(password, stored_password):
-                entry_id = log_login(username)   # Record the login event; capture the log entry ID
+                entry_id = log_login(
+                    username
+                )  # Record the login event; capture the log entry ID
                 return True, "Login successful", entry_id
 
             # Password incorrect

@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QShortcut, QKeySequence
-from PyQt6.QtCore import Qt  
+from PyQt6.QtCore import Qt
 
 from ui.main_window import LoginWindow
 from utils.xml_handler import init_xml

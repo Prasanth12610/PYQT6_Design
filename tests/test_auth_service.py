@@ -4,6 +4,7 @@ tests/test_auth_service.py
 Automated tests for services/auth_service.py and utils/security.py.
 Run with:  pytest tests/ -v --cov=services --cov=utils
 """
+
 import sys
 import os
 
@@ -12,8 +13,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.security import hash_password, verify_password
 
-
 # ── Security / hashing tests ──────────────────────────────────────────────────
+
 
 class TestHashPassword:
     def test_produces_64_char_hex_digest(self):

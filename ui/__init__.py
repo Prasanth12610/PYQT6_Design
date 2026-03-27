@@ -5,10 +5,10 @@ from ui.dashboard_ui import DashboardWindow
 from ui.svg_icons import get_icon, clear_icon_cache
 
 __all__ = [
-    'LoginWindow',
-    'LoginPage',
-    'RegisterPage',
-    'DashboardWindow',
-    'get_icon',
-    'clear_icon_cache'
+    "LoginWindow",
+    "LoginPage",
+    "RegisterPage",
+    "DashboardWindow",
+    "get_icon",
+    "clear_icon_cache",
 ]

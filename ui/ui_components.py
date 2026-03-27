@@ -1,19 +1,39 @@
 import math
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLineEdit,
-    QPushButton, QLabel, QFrame, QProgressBar,
-    QGraphicsDropShadowEffect, QSizePolicy
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLineEdit,
+    QPushButton,
+    QLabel,
+    QFrame,
+    QProgressBar,
+    QGraphicsDropShadowEffect,
+    QSizePolicy,
 )
 from PyQt6.QtCore import (
-    Qt, QPropertyAnimation, QEasingCurve,
-    QTimer, QPoint, QSize, QRectF
+    Qt,
+    QPropertyAnimation,
+    QEasingCurve,
+    QTimer,
+    QPoint,
+    QSize,
+    QRectF,
 )
 from PyQt6.QtGui import (
-    QColor, QPainter, QLinearGradient, QBrush,
-    QPen, QCursor, QIcon, QPixmap, QPainterPath
+    QColor,
+    QPainter,
+    QLinearGradient,
+    QBrush,
+    QPen,
+    QCursor,
+    QIcon,
+    QPixmap,
+    QPainterPath,
 )
 
-#------------  Eye icon --------------------
+
+# ------------  Eye icon --------------------
 def _eye_icon(visible: bool, px_size=20, color=QColor(150, 155, 185)) -> QIcon:
     sz = px_size
     pm = QPixmap(sz, sz)
@@ -29,29 +49,25 @@ def _eye_icon(visible: bool, px_size=20, color=QColor(150, 155, 185)) -> QIcon:
     p.setPen(pen)
     p.setBrush(Qt.BrushStyle.NoBrush)
 
-    cx   = sz / 2.0
-    cy   = sz / 2.0
-    ew   = sz * 0.80
-    eh   = sz * 0.46
+    cx = sz / 2.0
+    cy = sz / 2.0
+    ew = sz * 0.80
+    eh = sz * 0.46
 
     top = QPainterPath()
-    top.moveTo(cx - ew/2, cy)
-    top.cubicTo(cx - ew*0.28, cy - eh,
-                cx + ew*0.28, cy - eh,
-                cx + ew/2, cy)
+    top.moveTo(cx - ew / 2, cy)
+    top.cubicTo(cx - ew * 0.28, cy - eh, cx + ew * 0.28, cy - eh, cx + ew / 2, cy)
 
     bot = QPainterPath()
-    bot.moveTo(cx + ew/2, cy)
-    bot.cubicTo(cx + ew*0.28, cy + eh,
-                cx - ew*0.28, cy + eh,
-                cx - ew/2, cy)
+    bot.moveTo(cx + ew / 2, cy)
+    bot.cubicTo(cx + ew * 0.28, cy + eh, cx - ew * 0.28, cy + eh, cx - ew / 2, cy)
 
     p.drawPath(top)
     p.drawPath(bot)
 
     if visible:
         pr = sz * 0.175
-        p.drawEllipse(QRectF(cx - pr, cy - pr, pr*2, pr*2))
+        p.drawEllipse(QRectF(cx - pr, cy - pr, pr * 2, pr * 2))
     else:
         x1 = cx + ew * 0.38
         y1 = cy - eh * 1.10
@@ -62,7 +78,8 @@ def _eye_icon(visible: bool, px_size=20, color=QColor(150, 155, 185)) -> QIcon:
     p.end()
     return QIcon(pm)
 
-#----------  Password field widget --------------------
+
+# ----------  Password field widget --------------------
 
 _FF = '"Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif'
 
@@ -86,7 +103,9 @@ class PwdField(QWidget):
         self.field = QLineEdit()
         self.field.setPlaceholderText(placeholder)
         self.field.setEchoMode(QLineEdit.EchoMode.Password)
-        self.field.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.field.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
         self.field.setStyleSheet(f"""
             QLineEdit {{
                 background: transparent;
@@ -115,6 +134,7 @@ class PwdField(QWidget):
 
     def eventFilter(self, obj, event):
         from PyQt6.QtCore import QEvent
+
         if obj is self.field:
             if event.type() == QEvent.Type.FocusIn:
                 self._set_border(True)
@@ -149,19 +169,21 @@ class PwdField(QWidget):
 
     def text(self):
         return self.field.text()
-    
+
     def setFocus(self):
         self.field.setFocus()
-    
+
     @property
     def returnPressed(self):
         return self.field.returnPressed
-    
+
     @property
     def textChanged(self):
         return self.field.textChanged
 
-#----------------  Animated gradient background ---------------
+
+# ----------------  Animated gradient background ---------------
+
 
 class GradientBG(QWidget):
     def __init__(self, parent=None):
@@ -187,16 +209,16 @@ class GradientBG(QWidget):
         p.setBrush(QBrush(g1))
         p.setPen(Qt.PenStyle.NoPen)
         p.drawEllipse(int(cx - 280 + s), int(cy - 300), 560, 520)
-        g2 = QLinearGradient(cx + 80 - s * .4, cy + 50, cx - 80, cy - 80)
+        g2 = QLinearGradient(cx + 80 - s * 0.4, cy + 50, cx - 80, cy - 80)
         g2.setColorAt(0, QColor(88, 46, 165, 55))
         g2.setColorAt(1, QColor(9, 11, 20, 0))
         p.setBrush(QBrush(g2))
-        p.drawEllipse(int(cx - 60 - s * .4), int(cy - 60), 440, 380)
+        p.drawEllipse(int(cx - 60 - s * 0.4), int(cy - 60), 440, 380)
 
 
-# 
+#
 #  Glass card
-# 
+#
 class GlassCard(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -212,9 +234,9 @@ class GlassCard(QWidget):
         p.drawLine(18, 1, self.width() - 18, 1)
 
 
-# 
+#
 #  Shake animation
-# 
+#
 def shake(w):
     orig = w.pos()
     a = QPropertyAnimation(w, b"pos")
@@ -226,7 +248,8 @@ def shake(w):
     a.start()
     w._shake = a
 
-#------------  Style constants and helpers -------------------
+
+# ------------  Style constants and helpers -------------------
 
 FIELD_S = f"""
     QLineEdit {{
@@ -288,33 +311,50 @@ BTN_GHOST = f"""
     QPushButton:pressed {{ background: rgba(255,255,255,0.09); }}
 """
 
-LBL_S = f'font-size:11px; font-weight:600; letter-spacing:1.1px; color:rgba(175,180,205,0.60); background:transparent; border:none; font-family:{_FF};'
-TTL_S = f'font-size:24px; font-weight:700; color:#FFFFFF; background:transparent; border:none; letter-spacing:-0.4px; font-family:{_FF};'
-SUB_S = f'font-size:13px; color:rgba(195,200,220,0.48); background:transparent; border:none; font-family:{_FF};'
-ERR_S = f'font-size:12px; color:#F87171; background:transparent; border:none; font-family:{_FF};'
-OK_S  = f'font-size:12px; color:#34D399; background:transparent; border:none; font-family:{_FF};'
+LBL_S = f"font-size:11px; font-weight:600; letter-spacing:1.1px; color:rgba(175,180,205,0.60); background:transparent; border:none; font-family:{_FF};"
+TTL_S = f"font-size:24px; font-weight:700; color:#FFFFFF; background:transparent; border:none; letter-spacing:-0.4px; font-family:{_FF};"
+SUB_S = f"font-size:13px; color:rgba(195,200,220,0.48); background:transparent; border:none; font-family:{_FF};"
+ERR_S = f"font-size:12px; color:#F87171; background:transparent; border:none; font-family:{_FF};"
+OK_S = f"font-size:12px; color:#34D399; background:transparent; border:none; font-family:{_FF};"
 
 
 def _lbl(txt):
-    w = QLabel(txt); w.setStyleSheet(LBL_S); return w
+    w = QLabel(txt)
+    w.setStyleSheet(LBL_S)
+    return w
+
 
 def _inp(ph, h=44):
-    w = QLineEdit(); w.setPlaceholderText(ph)
-    w.setFixedHeight(h); w.setStyleSheet(FIELD_S); return w
+    w = QLineEdit()
+    w.setPlaceholderText(ph)
+    w.setFixedHeight(h)
+    w.setStyleSheet(FIELD_S)
+    return w
+
 
 def _divider():
-    row = QHBoxLayout(); row.setSpacing(0)
-    ln1 = QFrame(); ln1.setFrameShape(QFrame.Shape.HLine)
+    row = QHBoxLayout()
+    row.setSpacing(0)
+    ln1 = QFrame()
+    ln1.setFrameShape(QFrame.Shape.HLine)
     ln1.setStyleSheet("background:rgba(255,255,255,0.07); border:none; max-height:1px;")
     lbl = QLabel("or")
-    lbl.setAlignment(Qt.AlignmentFlag.AlignCenter); lbl.setFixedWidth(32)
-    lbl.setStyleSheet(f"font-size:12px; color:rgba(195,200,220,0.28); background:transparent; border:none; font-family:{_FF};")
-    ln2 = QFrame(); ln2.setFrameShape(QFrame.Shape.HLine)
+    lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    lbl.setFixedWidth(32)
+    lbl.setStyleSheet(
+        f"font-size:12px; color:rgba(195,200,220,0.28); background:transparent; border:none; font-family:{_FF};"
+    )
+    ln2 = QFrame()
+    ln2.setFrameShape(QFrame.Shape.HLine)
     ln2.setStyleSheet("background:rgba(255,255,255,0.07); border:none; max-height:1px;")
-    row.addWidget(ln1); row.addWidget(lbl); row.addWidget(ln2)
+    row.addWidget(ln1)
+    row.addWidget(lbl)
+    row.addWidget(ln2)
     return row
 
-#-----------  Status label with fade-out auto-hide  -----------------
+
+# -----------  Status label with fade-out auto-hide  -----------------
+
 
 class StatusLabel(QLabel):
     def __init__(self, parent=None):
@@ -342,11 +382,11 @@ class StatusLabel(QLabel):
             self._timer.start(ms)
 
     def _cancel_fade(self):
-        if hasattr(self, '_ft') and self._ft.isActive():
+        if hasattr(self, "_ft") and self._ft.isActive():
             self._ft.stop()
 
     def _start_fade(self):
-        self._steps  = 12
+        self._steps = 12
         self._step_i = 0
         self._orig_style = self.styleSheet()
         self._ft = QTimer(self)
@@ -368,23 +408,34 @@ class StatusLabel(QLabel):
             self.setStyleSheet(ERR_S)
 
 
+# -----------  Password strength helper --------------
 
-#-----------  Password strength helper --------------
 
 def pw_strength(pwd):
-    if not pwd: return 0, "", "#F87171"
-    s = sum([
-        len(pwd) >= 6,
-        len(pwd) >= 10,
-        any(c.isupper() for c in pwd),
-        any(c.isdigit() for c in pwd),
-        any(c in r"!@#$%^&*()_+-=[]{}|;:,.<>?" for c in pwd),
-    ]) * 20
-    if s <= 20:   return s, "Weak",   "#F87171"
-    elif s <= 60: return s, "Fair",   "#FBBF24"
-    else:         return s, "Strong", "#34D399"
+    if not pwd:
+        return 0, "", "#F87171"
+    s = (
+        sum(
+            [
+                len(pwd) >= 6,
+                len(pwd) >= 10,
+                any(c.isupper() for c in pwd),
+                any(c.isdigit() for c in pwd),
+                any(c in r"!@#$%^&*()_+-=[]{}|;:,.<>?" for c in pwd),
+            ]
+        )
+        * 20
+    )
+    if s <= 20:
+        return s, "Weak", "#F87171"
+    elif s <= 60:
+        return s, "Fair", "#FBBF24"
+    else:
+        return s, "Strong", "#34D399"
 
-#---------  Page base ----------------
+
+# ---------  Page base ----------------
+
 
 class _Page(QWidget):
     _CARD_W = 400
@@ -392,10 +443,11 @@ class _Page(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.bg   = GradientBG(self)
+        self.bg = GradientBG(self)
         self.card = GlassCard(self)
         sh = QGraphicsDropShadowEffect()
-        sh.setBlurRadius(55); sh.setOffset(0, 18)
+        sh.setBlurRadius(55)
+        sh.setOffset(0, 18)
         sh.setColor(QColor(0, 0, 0, 110))
         self.card.setGraphicsEffect(sh)
 
@@ -406,11 +458,12 @@ class _Page(QWidget):
         ch = min(max(self.card.sizeHint().height(), self._CARD_H), H - 40)
         self.card.setGeometry((W - cw) // 2, (H - ch) // 2, cw, ch)
 
+
 # Color constants for password strength (using existing colors)
 GREEN = "#34D399"  # Already defined in OK_S
-RED = "#F87171"    # Already defined in ERR_S  
+RED = "#F87171"  # Already defined in ERR_S
 YELLOW = "#FBBF24"
-BLUE = "#4A87F5"   # From ACCENT in BTN_PRI
+BLUE = "#4A87F5"  # From ACCENT in BTN_PRI
 TEXT2 = "rgba(195,200,220,0.48)"  # From SUB_S
 
 
@@ -420,15 +473,15 @@ def check_password_requirements(pwd):
     Returns: (score, strength_text, color, requirements_dict)
     """
     requirements = {
-        'length': len(pwd) >= 6,
-        'uppercase': any(c.isupper() for c in pwd),
-        'number': any(c.isdigit() for c in pwd),
-        'special': any(c in r"!@#$%^&*()_+-=[]{}|;:,.<>?" for c in pwd)
+        "length": len(pwd) >= 6,
+        "uppercase": any(c.isupper() for c in pwd),
+        "number": any(c.isdigit() for c in pwd),
+        "special": any(c in r"!@#$%^&*()_+-=[]{}|;:,.<>?" for c in pwd),
     }
-    
+
     # Calculate strength score (0-100)
     score = sum(requirements.values()) * 25
-    
+
     # Determine strength level
     if score <= 25:
         strength = "Weak"
@@ -442,7 +495,7 @@ def check_password_requirements(pwd):
     else:
         strength = "Strong"
         color = GREEN
-    
+
     return score, strength, color, requirements
 
 
@@ -469,18 +522,15 @@ class PasswordRequirementWidget(QWidget):
 
         # Base text
         self.base_requirements = {
-            'length': 'At least 6 characters',
-            'uppercase': 'One uppercase (A-Z)',
-            'number': 'One number (0-9)',
-            'special': 'One special (!@#$%)'
+            "length": "At least 6 characters",
+            "uppercase": "One uppercase (A-Z)",
+            "number": "One number (0-9)",
+            "special": "One special (!@#$%)",
         }
 
-        self.update_requirements({
-            'length': False,
-            'uppercase': False,
-            'number': False,
-            'special': False
-        })
+        self.update_requirements(
+            {"length": False, "uppercase": False, "number": False, "special": False}
+        )
 
     def update_requirements(self, requirements):
         parts = []

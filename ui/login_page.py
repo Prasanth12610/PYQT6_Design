@@ -1,4 +1,4 @@
-from datetime import datetime 
+from datetime import datetime
 
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt, QTimer
@@ -6,8 +6,17 @@ from PyQt6.QtGui import QCursor
 
 from services.auth_service import login_user
 from ui.ui_components import (
-    _Page, _lbl, _inp, PwdField, StatusLabel, _divider,
-    shake, BTN_PRI, BTN_GHOST, TTL_S, SUB_S
+    _Page,
+    _lbl,
+    _inp,
+    PwdField,
+    StatusLabel,
+    _divider,
+    shake,
+    BTN_PRI,
+    BTN_GHOST,
+    TTL_S,
+    SUB_S,
 )
 
 
@@ -23,7 +32,9 @@ class LoginPage(_Page):
 
         #  App icon
         ico = QLabel("")
-        ico.setStyleSheet("font-size:20px; color:#6B6CF6; background:transparent; border:none;")
+        ico.setStyleSheet(
+            "font-size:20px; color:#6B6CF6; background:transparent; border:none;"
+        )
         lay.addWidget(ico)
         lay.addSpacing(15)
 
@@ -84,7 +95,7 @@ class LoginPage(_Page):
     # =========================================================================
     def _go(self):
         user = self.u.text().strip()
-        pwd  = self.p.text()
+        pwd = self.p.text()
 
         # Guard: both fields must be filled
         if not user or not pwd:
@@ -106,9 +117,9 @@ class LoginPage(_Page):
     #  On failure: show error + shake animation
     # =========================================================================
     def _fin(self, user, pwd):
-        result   = login_user(user, pwd)
-        ok       = result[0]
-        msg      = result[1]
+        result = login_user(user, pwd)
+        ok = result[0]
+        msg = result[1]
         entry_id = result[2] if len(result) > 2 else None
 
         # Re-enable button regardless of outcome
@@ -122,7 +133,9 @@ class LoginPage(_Page):
             login_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             # Brief delay so the user sees the success message before switching
-            QTimer.singleShot(600, lambda: self._open_dashboard(user, entry_id, login_time))
+            QTimer.singleShot(
+                600, lambda: self._open_dashboard(user, entry_id, login_time)
+            )
         else:
             self.st.show_err("  " + msg, auto_hide_ms=8000)
             shake(self.card)

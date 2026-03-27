@@ -1,16 +1,31 @@
 from PyQt6.QtWidgets import (
-    QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QProgressBar, QSizePolicy
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QProgressBar,
+    QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QCursor
 
 from services.auth_service import register_user
 from ui.ui_components import (
-    _Page, _lbl, _inp, PwdField, StatusLabel,
-    shake, BTN_PRI, TTL_S, SUB_S, _FF,
+    _Page,
+    _lbl,
+    _inp,
+    PwdField,
+    StatusLabel,
+    shake,
+    BTN_PRI,
+    TTL_S,
+    SUB_S,
+    _FF,
     # New imports for enhanced password strength
-    check_password_requirements, PasswordRequirementWidget,
-    GREEN, RED
+    check_password_requirements,
+    PasswordRequirementWidget,
+    GREEN,
+    RED,
 )
 
 
@@ -25,7 +40,9 @@ class RegisterPage(_Page):
         lay.setSpacing(0)
 
         ico = QLabel("")
-        ico.setStyleSheet("font-size:20px; color:#6B6CF6; background:transparent; border:none;")
+        ico.setStyleSheet(
+            "font-size:20px; color:#6B6CF6; background:transparent; border:none;"
+        )
         lay.addWidget(ico)
         lay.addSpacing(14)
 
@@ -52,26 +69,34 @@ class RegisterPage(_Page):
 
         # Password requirements checklist (from ui_components)
         self.req_widget = PasswordRequirementWidget()
-        self.req_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.req_widget.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+        )
         lay.addWidget(self.req_widget)
         lay.addSpacing(7)
 
         # Strength bar
         srow = QHBoxLayout()
         srow.setSpacing(8)
-        
+
         self.bar = QProgressBar()
         self.bar.setRange(0, 100)
         self.bar.setValue(0)
         self.bar.setFixedHeight(4)
         self.bar.setTextVisible(False)
-        self.bar.setStyleSheet("QProgressBar{background:rgba(255,255,255,0.06);border:none;border-radius:2px;} QProgressBar::chunk{border-radius:2px;background:#F87171;}")
-        
+        self.bar.setStyleSheet(
+            "QProgressBar{background:rgba(255,255,255,0.06);border:none;border-radius:2px;} QProgressBar::chunk{border-radius:2px;background:#F87171;}"
+        )
+
         self.strength_label = QLabel("")
         self.strength_label.setFixedWidth(44)
-        self.strength_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        self.strength_label.setStyleSheet(f"font-size:11px; color:#F87171; background:transparent; border:none; font-family:{_FF};")
-        
+        self.strength_label.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
+        self.strength_label.setStyleSheet(
+            f"font-size:11px; color:#F87171; background:transparent; border:none; font-family:{_FF};"
+        )
+
         srow.addWidget(self.bar)
         srow.addWidget(self.strength_label)
         lay.addLayout(srow)
@@ -87,7 +112,9 @@ class RegisterPage(_Page):
 
         # Password match indicator
         self.match_label = QLabel("")
-        self.match_label.setStyleSheet(f"font-size:11px; color:{RED}; background:transparent; border:none; font-family:{_FF};")
+        self.match_label.setStyleSheet(
+            f"font-size:11px; color:{RED}; background:transparent; border:none; font-family:{_FF};"
+        )
         lay.addWidget(self.match_label)
         lay.addSpacing(5)
 
@@ -95,7 +122,6 @@ class RegisterPage(_Page):
         self.st = StatusLabel()
         lay.addSpacing(16)
         lay.addWidget(self.st)
-    
 
         # Create Account button
         self.btn = QPushButton("Create Account")
@@ -110,7 +136,9 @@ class RegisterPage(_Page):
         bk = QPushButton("← Back to Sign In")
         bk.setFlat(True)
         bk.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        bk.setStyleSheet(f"QPushButton{{background:transparent;border:none;color:rgba(195,200,220,0.45);font-size:13px;font-family:{_FF};}} QPushButton:hover{{color:rgba(195,200,220,0.82);}}")
+        bk.setStyleSheet(
+            f"QPushButton{{background:transparent;border:none;color:rgba(195,200,220,0.45);font-size:13px;font-family:{_FF};}} QPushButton:hover{{color:rgba(195,200,220,0.82);}}"
+        )
         bk.clicked.connect(self._switch)
         lay.addWidget(bk, alignment=Qt.AlignmentFlag.AlignHCenter)
 
@@ -130,7 +158,7 @@ class RegisterPage(_Page):
     def _update_password_strength(self, pwd):
         """Update strength meter and requirements checklist"""
         score, strength, color, requirements = check_password_requirements(pwd)
-        
+
         # Update progress bar
         self.bar.setValue(score)
         self.bar.setStyleSheet(f"""
@@ -144,11 +172,13 @@ class RegisterPage(_Page):
                 background:{color};
             }}
         """)
-        
+
         # Update strength label
         self.strength_label.setText(strength)
-        self.strength_label.setStyleSheet(f"font-size:11px; color:{color}; background:transparent; border:none; font-family:{_FF};")
-        
+        self.strength_label.setStyleSheet(
+            f"font-size:11px; color:{color}; background:transparent; border:none; font-family:{_FF};"
+        )
+
         # Update requirements checklist
         self.req_widget.update_requirements(requirements)
 
@@ -156,15 +186,19 @@ class RegisterPage(_Page):
         """Check if passwords match and update indicator"""
         pwd = self.p.text()
         confirm = self.c.text()
-        
+
         if not pwd or not confirm:
             self.match_label.setText("")
         elif pwd == confirm:
             self.match_label.setText(" Passwords match")
-            self.match_label.setStyleSheet(f"font-size:11px; color:{GREEN}; background:transparent; border:none; font-family:{_FF};")
+            self.match_label.setStyleSheet(
+                f"font-size:11px; color:{GREEN}; background:transparent; border:none; font-family:{_FF};"
+            )
         else:
             self.match_label.setText(" Passwords do not match")
-            self.match_label.setStyleSheet(f"font-size:11px; color:{RED}; background:transparent; border:none; font-family:{_FF};")
+            self.match_label.setStyleSheet(
+                f"font-size:11px; color:{RED}; background:transparent; border:none; font-family:{_FF};"
+            )
 
     def _validate_password(self, pwd):
         """Validate password meets all requirements"""
@@ -173,25 +207,27 @@ class RegisterPage(_Page):
 
     def _go(self):
         user, pwd, conf = self.u.text().strip(), self.p.text(), self.c.text()
-        
+
         # Check empty fields
         if not user or not pwd or not conf:
             self.st.show_err("Please fill in all fields.")
             shake(self.card)
             return
-            
+
         # Check password match
         if pwd != conf:
             self.st.show_err("Passwords do not match.")
             shake(self.card)
             return
-            
+
         # Validate password strength (all requirements must be met)
         if not self._validate_password(pwd):
-            self.st.show_err("Password must be at least 6 characters with uppercase, number, and special character.")
+            self.st.show_err(
+                "Password must be at least 6 characters with uppercase, number, and special character."
+            )
             shake(self.card)
             return
-            
+
         # Proceed with registration
         self.btn.setText("Creating account…")
         self.btn.setEnabled(False)
