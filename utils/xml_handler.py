@@ -7,8 +7,8 @@
 #  Used by : services/auth_service.py, ui/dashboard_ui.py
 # =============================================================================
 
-import xml.etree.ElementTree as ET # Standard-library XML parser/writer
-from defusedxml.ElementTree import parse  
+import xml.etree.ElementTree as ET  # Standard-library XML parser/writer
+from defusedxml.ElementTree import parse
 import os  # File/directory existence checks
 from datetime import datetime  # Timestamp generation
 
