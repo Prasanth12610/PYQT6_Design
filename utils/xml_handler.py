@@ -7,7 +7,8 @@
 #  Used by : services/auth_service.py, ui/dashboard_ui.py
 # =============================================================================
 
-import xml.etree.ElementTree as ET  # Standard-library XML parser/writer
+import xml.etree.ElementTree as ET # Standard-library XML parser/writer
+from defusedxml.ElementTree import parse  
 import os  # File/directory existence checks
 from datetime import datetime  # Timestamp generation
 
@@ -56,7 +57,7 @@ def init_xml():
 def safe_parse(file_path, default_root_tag):
     try:
         if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-            tree = ET.parse(file_path)
+            tree = parse(file_path)
             return tree.getroot()
         else:
             # File doesn't exist or is empty - create fresh
