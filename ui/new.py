@@ -8,6 +8,17 @@
 #  4. All icons are crisp SVG vectors
 # =============================================================================
 
+from utils.xml_handler import (
+    get_all_users,
+    get_login_stats,
+    get_daily_logins,
+    log_logout,
+    read_logs,
+)
+import matplotlib.patches as mpatches
+import matplotlib.ticker as ticker
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 import math
 import os
 from datetime import datetime
@@ -55,18 +66,7 @@ from PyQt6.QtGui import (
 import matplotlib
 
 matplotlib.use("QtAgg")
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
-from matplotlib.figure import Figure
-import matplotlib.ticker as ticker
-import matplotlib.patches as mpatches
 
-from utils.xml_handler import (
-    get_all_users,
-    get_login_stats,
-    get_daily_logins,
-    log_logout,
-    read_logs,
-)
 
 #
 #  DESIGN TOKENS
@@ -117,7 +117,8 @@ _FF = '"Segoe UI", "SF Pro Text", "Helvetica Neue", "Arial", "sans-serif"'
 def create_svg_icon(svg_content, size=20, color="#FFFFFF"):
     """Create QIcon from SVG string content with specified color"""
     # Replace currentColor with the specified color
-    colored_svg = svg_content.replace('stroke="currentColor"', f'stroke="{color}"')
+    colored_svg = svg_content.replace(
+        'stroke="currentColor"', f'stroke="{color}"')
     colored_svg = colored_svg.replace('fill="currentColor"', f'fill="{color}"')
 
     # Use colored_svg in the template, NOT svg_content
@@ -436,7 +437,8 @@ class _Chart(FigureCanvasQTAgg):
     def __init__(self):
         self.fig = Figure(figsize=(_CW, _CH), facecolor=CARD_BG)
         super().__init__(self.fig)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding,
+                           QSizePolicy.Policy.Expanding)
 
     def _new_ax(self, title=""):
         self.fig.clear()
@@ -520,7 +522,8 @@ class BarChart(_Chart):
         self._draw({})
 
     def _draw(self, stats):
-        self.fig.subplots_adjust(left=_AX_L, right=_AX_R, top=_TITLE_TOP, bottom=0.30)
+        self.fig.subplots_adjust(
+            left=_AX_L, right=_AX_R, top=_TITLE_TOP, bottom=0.30)
         ax = self.fig.add_subplot(111)
         ax.set_facecolor(CARD_BG)
         for sp in ax.spines.values():
@@ -588,7 +591,8 @@ class LineChart(_Chart):
         self._draw({})
 
     def _draw(self, daily):
-        self.fig.subplots_adjust(left=_AX_L, right=_AX_R, top=_TITLE_TOP, bottom=0.26)
+        self.fig.subplots_adjust(
+            left=_AX_L, right=_AX_R, top=_TITLE_TOP, bottom=0.26)
         ax = self.fig.add_subplot(111)
         ax.set_facecolor(CARD_BG)
         for sp in ax.spines.values():
@@ -667,7 +671,8 @@ def _divider():
     d = QFrame()
     d.setFrameShape(QFrame.Shape.HLine)
     d.setFixedHeight(1)
-    d.setStyleSheet("background:rgba(255,255,255,0.06);border:none;max-height:1px;")
+    d.setStyleSheet(
+        "background:rgba(255,255,255,0.06);border:none;max-height:1px;")
     return d
 
 
@@ -738,7 +743,8 @@ class UserTable(QTableWidget):
         self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.horizontalHeader().setFixedHeight(40)  # Increased from 36
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         # Center align all headers
         header = self.horizontalHeader()
@@ -837,7 +843,8 @@ class UserTable(QTableWidget):
 #  Analytics Table with improved scrollbar (right corner) - FIXED HEADER ALIGNMENT
 #
 class AnalyticsTable(QTableWidget):
-    HEADERS = ["#", "Username", "Login Time", "Logout Time", "Duration", "Status"]
+    HEADERS = ["#", "Username", "Login Time",
+               "Logout Time", "Duration", "Status"]
 
     def __init__(self):
         super().__init__()
@@ -851,7 +858,8 @@ class AnalyticsTable(QTableWidget):
         self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.horizontalHeader().setFixedHeight(40)  # Increased from 36
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setMinimumHeight(420)
 
         # Center align all headers
@@ -936,7 +944,8 @@ class AnalyticsTable(QTableWidget):
             uname = _t("username")
             lt = _t("login_time")
             lo_el = e.find("logout_time")
-            lo = (lo_el.text or "")[:16] if lo_el is not None and lo_el.text else None
+            lo = (lo_el.text or "")[
+                :16] if lo_el is not None and lo_el.text else None
             dur_el = e.find("duration_min")
             dur = dur_el.text if dur_el is not None and dur_el.text else None
             active = lo is None
@@ -961,7 +970,8 @@ class AnalyticsTable(QTableWidget):
                     try:
                         d = float(dur)
                         item.setForeground(
-                            QColor(GREEN if d < 5 else YELLOW if d < 30 else ORANGE)
+                            QColor(GREEN if d < 5 else YELLOW if d <
+                                   30 else ORANGE)
                         )
                     except Exception:
                         pass
@@ -1090,7 +1100,8 @@ def _build_overview_page(cards, pie, bar, line, table):
 
     # Analytics section
     lay.addSpacing(18)
-    lay.addLayout(_section_hdr("Analytics Overview", "Live", GREEN, "overview"))
+    lay.addLayout(_section_hdr(
+        "Analytics Overview", "Live", GREEN, "overview"))
     lay.addSpacing(8)
 
     # Chart grid - 3 charts only
@@ -1110,7 +1121,8 @@ def _build_overview_page(cards, pie, bar, line, table):
     lay.addSpacing(18)
     lay.addLayout(
         _section_hdr(
-            "Registered Users", str(max(0, table.rowCount())), ACCENT, "users_section"
+            "Registered Users", str(
+                max(0, table.rowCount())), ACCENT, "users_section"
         )
     )
     lay.addSpacing(8)
@@ -1265,7 +1277,8 @@ def _build_analytics_page(atbl):
     lay.addWidget(separator)
 
     # Section header
-    lay.addLayout(_section_hdr("Login Sessions", "All Time", ACCENT2, "analytics"))
+    lay.addLayout(_section_hdr("Login Sessions",
+                  "All Time", ACCENT2, "analytics"))
     lay.addSpacing(8)
     lay.addWidget(atbl)
 
@@ -1292,7 +1305,8 @@ class DashboardWindow(QMainWindow):
         self.resize(1300, 840)
 
         pal = self.palette()
-        pal.setColor(QPalette.ColorRole.Window, QColor(*HoverCard._hex_to_rgb(BG)))
+        pal.setColor(QPalette.ColorRole.Window,
+                     QColor(*HoverCard._hex_to_rgb(BG)))
         self.setPalette(pal)
 
         root = QWidget()
@@ -1306,14 +1320,16 @@ class DashboardWindow(QMainWindow):
         content = QWidget()
         content.setStyleSheet(f"background:{BG};")
         cl = QVBoxLayout(content)
-        cl.setContentsMargins(28, 14, 18, 18)  # Reduced right margin for scrollbar
+        # Reduced right margin for scrollbar
+        cl.setContentsMargins(28, 14, 18, 18)
         cl.setSpacing(12)
         cl.addWidget(self._build_topbar())
         cl.addWidget(_divider())
 
         # Breadcrumb
         self._bc = QLabel("Overview")
-        self._bc.setStyleSheet(f"font-size:11px;font-weight:500;color:{TEXT2};")
+        self._bc.setStyleSheet(
+            f"font-size:11px;font-weight:500;color:{TEXT2};")
         cl.addWidget(self._bc)
 
         self._stack = QStackedWidget()
@@ -1367,7 +1383,8 @@ class DashboardWindow(QMainWindow):
         self._anim_group.addAnimation(self._scale_anim)
 
         # Re-enable button when animation finishes
-        self._anim_group.finished.connect(lambda: self._refresh_btn.setEnabled(True))
+        self._anim_group.finished.connect(
+            lambda: self._refresh_btn.setEnabled(True))
 
         # Start animation
         self._anim_group.start()
@@ -1385,8 +1402,10 @@ class DashboardWindow(QMainWindow):
         self._sc_u = StatCard(
             "TOTAL USERS", 0, "Registered accounts", ACCENT, "users_stat"
         )
-        self._sc_l = StatCard("TOTAL LOGINS", 0, "All time", ACCENT2, "logins_stat")
-        self._sc_t = StatCard("LOGINS TODAY", 0, "Since midnight", GREEN, "today_stat")
+        self._sc_l = StatCard(
+            "TOTAL LOGINS", 0, "All time", ACCENT2, "logins_stat")
+        self._sc_t = StatCard(
+            "LOGINS TODAY", 0, "Since midnight", GREEN, "today_stat")
         self._sc_s = StatCard(
             "YOUR SESSION",
             "00:00",
@@ -1467,7 +1486,8 @@ class DashboardWindow(QMainWindow):
         )
         ll.addWidget(sq)
         app_name = QLabel("MyApp")
-        app_name.setStyleSheet(f"font-size:15px;font-weight:800;color:{TEXT1};")
+        app_name.setStyleSheet(
+            f"font-size:15px;font-weight:800;color:{TEXT1};")
         ll.addWidget(app_name)
         ll.addStretch()
         lay.addWidget(logo_w)
@@ -1534,7 +1554,8 @@ class DashboardWindow(QMainWindow):
         )
         ar.addWidget(av)
         user_name = QLabel(self._user)
-        user_name.setStyleSheet(f"font-size:13px;font-weight:600;color:{TEXT1};")
+        user_name.setStyleSheet(
+            f"font-size:13px;font-weight:600;color:{TEXT1};")
         ar.addWidget(user_name)
         ar.addStretch()
         fl.addLayout(ar)
@@ -1615,7 +1636,8 @@ class DashboardWindow(QMainWindow):
 
         now = datetime.now().strftime("%a, %d %b %Y")
         self._dlbl = QLabel(now)
-        self._dlbl.setStyleSheet(f"font-size:11px;font-weight:500;color:{TEXT2};")
+        self._dlbl.setStyleSheet(
+            f"font-size:11px;font-weight:500;color:{TEXT2};")
         row.addWidget(self._dlbl)
 
         row.addSpacing(10)
@@ -1627,7 +1649,8 @@ class DashboardWindow(QMainWindow):
         row.addSpacing(10)
 
         self._tlbl = QLabel(datetime.now().strftime("%H:%M"))
-        self._tlbl.setStyleSheet(f"font-size:12px;font-weight:700;color:{TEXT1};")
+        self._tlbl.setStyleSheet(
+            f"font-size:12px;font-weight:700;color:{TEXT1};")
         row.addWidget(self._tlbl)
 
         ct = QTimer(self)
@@ -1742,7 +1765,8 @@ class DevTools(QWidget):
     def populate_widgets(self):
         """Load all widgets into tree"""
         for widget in QApplication.allWidgets():
-            item = QTreeWidgetItem([widget.objectName(), widget.__class__.__name__])
+            item = QTreeWidgetItem(
+                [widget.objectName(), widget.__class__.__name__])
             self.tree.addTopLevelItem(item)
 
     def apply_style(self):

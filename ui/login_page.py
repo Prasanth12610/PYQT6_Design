@@ -127,7 +127,8 @@ class LoginPage(_Page):
         self.btn.setEnabled(True)
 
         if ok:
-            self.st.show_ok("  " + msg + "  — opening dashboard…", auto_hide_ms=2000)
+            self.st.show_ok(
+                "  " + msg + "  — opening dashboard…", auto_hide_ms=2000)
 
             # Capture login timestamp NOW (datetime is imported at top of file)
             login_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -147,7 +148,8 @@ class LoginPage(_Page):
         from ui.dashboard_ui import DashboardWindow
 
         # Keep a reference so the dashboard isn't garbage-collected
-        self._dashboard = DashboardWindow(user, str(entry_id or "0"), login_time)
+        self._dashboard = DashboardWindow(
+            user, str(entry_id or "0"), login_time)
         self._dashboard.show()
 
         # Hide the login window (not close — dashboard's Sign Out reopens it)

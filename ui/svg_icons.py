@@ -15,7 +15,8 @@ _ICON_CACHE = {}
 def create_svg_icon(svg_content, size=20, color="#FFFFFF"):
     """Create QIcon from SVG string content with specified color"""
     # Replace currentColor with the specified color
-    colored_svg = svg_content.replace('stroke="currentColor"', f'stroke="{color}"')
+    colored_svg = svg_content.replace(
+        'stroke="currentColor"', f'stroke="{color}"')
     colored_svg = colored_svg.replace('fill="currentColor"', f'fill="{color}"')
 
     # Use colored_svg in the template, NOT svg_content

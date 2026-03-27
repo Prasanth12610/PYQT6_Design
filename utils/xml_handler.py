@@ -137,7 +137,8 @@ def add_user(username, password_hash):
     user = ET.SubElement(root, "user")
     ET.SubElement(user, "username").text = username
     ET.SubElement(user, "password").text = password_hash
-    ET.SubElement(user, "created").text = datetime.now().strftime("%Y-%m-%d %H:%M")
+    ET.SubElement(user, "created").text = datetime.now().strftime(
+        "%Y-%m-%d %H:%M")
 
     ET.indent(tree, space="    ")
     tree.write(USERS_FILE, encoding="utf-8", xml_declaration=True)
@@ -175,7 +176,8 @@ def get_all_users():
 
     for u in root.findall("user"):  # "user" matches fixed tag name
         uname = u.find("username").text
-        created = u.find("created").text if u.find("created") is not None else "N/A"
+        created = u.find("created").text if u.find(
+            "created") is not None else "N/A"
 
         user_logs = [
             l
@@ -272,7 +274,8 @@ def log_logout(entry_id, login_time_str):
             now = datetime.now()
             entry.find("logout_time").text = now.strftime("%Y-%m-%d %H:%M:%S")
             try:
-                login_dt = datetime.strptime(login_time_str, "%Y-%m-%d %H:%M:%S")
+                login_dt = datetime.strptime(
+                    login_time_str, "%Y-%m-%d %H:%M:%S")
                 mins = round((now - login_dt).total_seconds() / 60, 1)
                 entry.find("duration_min").text = str(mins)
             except Exception:

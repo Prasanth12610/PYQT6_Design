@@ -5,13 +5,13 @@ Automated tests for services/auth_service.py and utils/security.py.
 Run with:  pytest tests/ -v --cov=services --cov=utils
 """
 
+from utils.security import hash_password, verify_password
 import sys
 import os
 
 # Make project root importable
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from utils.security import hash_password, verify_password
 
 # ── Security / hashing tests ──────────────────────────────────────────────────
 

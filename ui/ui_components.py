@@ -56,11 +56,13 @@ def _eye_icon(visible: bool, px_size=20, color=QColor(150, 155, 185)) -> QIcon:
 
     top = QPainterPath()
     top.moveTo(cx - ew / 2, cy)
-    top.cubicTo(cx - ew * 0.28, cy - eh, cx + ew * 0.28, cy - eh, cx + ew / 2, cy)
+    top.cubicTo(cx - ew * 0.28, cy - eh, cx +
+                ew * 0.28, cy - eh, cx + ew / 2, cy)
 
     bot = QPainterPath()
     bot.moveTo(cx + ew / 2, cy)
-    bot.cubicTo(cx + ew * 0.28, cy + eh, cx - ew * 0.28, cy + eh, cx - ew / 2, cy)
+    bot.cubicTo(cx + ew * 0.28, cy + eh, cx -
+                ew * 0.28, cy + eh, cx - ew / 2, cy)
 
     p.drawPath(top)
     p.drawPath(bot)
@@ -121,7 +123,8 @@ class PwdField(QWidget):
         self._btn.setFixedSize(30, 30)
         self._btn.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self._btn.setFlat(True)
-        self._btn.setStyleSheet("QPushButton { background:transparent; border:none; }")
+        self._btn.setStyleSheet(
+            "QPushButton { background:transparent; border:none; }")
         self._btn.clicked.connect(self._toggle)
 
         inner.addWidget(self.field)
@@ -337,7 +340,8 @@ def _divider():
     row.setSpacing(0)
     ln1 = QFrame()
     ln1.setFrameShape(QFrame.Shape.HLine)
-    ln1.setStyleSheet("background:rgba(255,255,255,0.07); border:none; max-height:1px;")
+    ln1.setStyleSheet(
+        "background:rgba(255,255,255,0.07); border:none; max-height:1px;")
     lbl = QLabel("or")
     lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
     lbl.setFixedWidth(32)
@@ -346,7 +350,8 @@ def _divider():
     )
     ln2 = QFrame()
     ln2.setFrameShape(QFrame.Shape.HLine)
-    ln2.setStyleSheet("background:rgba(255,255,255,0.07); border:none; max-height:1px;")
+    ln2.setStyleSheet(
+        "background:rgba(255,255,255,0.07); border:none; max-height:1px;")
     row.addWidget(ln1)
     row.addWidget(lbl)
     row.addWidget(ln2)
@@ -397,7 +402,8 @@ class StatusLabel(QLabel):
         self._step_i += 1
         alpha = max(0.0, 1.0 - self._step_i / self._steps)
         a = int(alpha * 255)
-        r, g, b = (52, 211, 153) if "34D399" in self._orig_style else (248, 113, 113)
+        r, g, b = (52, 211, 153) if "34D399" in self._orig_style else (
+            248, 113, 113)
         self.setStyleSheet(
             f"font-size:12px; color:rgba({r},{g},{b},{a}); "
             f"background:transparent; border:none; font-family:{_FF};"
@@ -529,7 +535,8 @@ class PasswordRequirementWidget(QWidget):
         }
 
         self.update_requirements(
-            {"length": False, "uppercase": False, "number": False, "special": False}
+            {"length": False, "uppercase": False,
+                "number": False, "special": False}
         )
 
     def update_requirements(self, requirements):
